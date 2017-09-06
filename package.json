@@ -1,0 +1,26 @@
+{
+    "name": "product-wishlist-app",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bluebird": "^3.5.0",
+        "body-parser": "^1.17.2",
+        "cors": "^2.8.4",
+        "dotenv": "^4.0.0",
+        "express": "^4.15.4",
+        "mongodb": "^2.2.31",
+        "mongoose": "^4.11.10",
+        "multer": "^1.3.0"
+    },
+    "devDependencies": {
+        "chai": "^4.1.2",
+        "mocha": "^3.5.0",
+        "nodemon": "^1.12.0"
+    }
+}
