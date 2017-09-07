@@ -2,7 +2,8 @@
 
 const User = require("mongoose").model("User"),
     Product = require('mongoose').model('Product'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    _ = require("lodash");
 
 
 /**
@@ -77,7 +78,7 @@ module.exports.createUser = (req, res) => {
  */
 module.exports.findUserWishlist = (req, res) => {
     var userId = req.params.id;
-    var promise = User.find(userId)
+    var promise = User.find({ _id: userId })
         .limit(1)
         .populate({
             path: 'wishlist'
@@ -89,7 +90,7 @@ module.exports.findUserWishlist = (req, res) => {
             if (users && users.length > 0)
                 return users[0];
             else
-                res.status(401).json({
+                res.status(400).json({
                     message: 'Bad Request. Provided User id is not a valid user id.'
                 });
         })
@@ -107,17 +108,18 @@ module.exports.addProductToWishlist = (req, res, next) => {
     var userId = req.params.id;
     var productId = req.body.productId;
 
-    var userPromise = User.find(userId)
+    var userPromise = User.find({ _id: userId })
         .limit(1)
         .exec();
 
-    var productPromise = Product.find(productId).limit(1).exec();
+    var productPromise = Product.find({ _id: productId }).limit(1).exec();
 
     Promise.all([userPromise, productPromise])
         .then(([users, products]) => {
 
-            if (!users || !products)
-                res.status(401).json({
+            if (!users || users.length === 0 || !products || products.length === 0)
+                return Promise.reject({
+                    statusCode: 400,
                     message: 'Bad Request. Provided User id or product does not exist.'
                 });
             else {
@@ -125,8 +127,15 @@ module.exports.addProductToWishlist = (req, res, next) => {
             }
         })
         .then(([user, product]) => {
-            user.wishlist.push(product);
-            user.save();
+
+            if (!_.includes(_.map(user.wishlist, toHexString), toHexString(product._id))) {
+                user.wishlist.push(product);
+                user.save();
+            } else
+                return Promise.reject({
+                    statusCode: 200,
+                    message: 'Product already in wishlist.'
+                });
         })
         .then((updatedUser) => {
             res.status(200)
@@ -138,4 +147,8 @@ module.exports.addProductToWishlist = (req, res, next) => {
         .catch((err) => {
             next(err);
         });
+};
+
+var toHexString = function(oid) {
+    return oid.toHexString();
 };

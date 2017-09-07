@@ -25,8 +25,8 @@ const Server = function() {
 
 
     this.app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.send({ 'error': err });
+        res.status(err.status || err.statusCode || 500);
+        res.send({ 'message': err.message });
     });
 
 };
