@@ -3,6 +3,7 @@
 APIs:
 
 1) Get All Users into the System
+
 Request:
     uri: /api/users
     methodType: GET
@@ -15,7 +16,7 @@ Response:
             name: user_name
         },...]
     }
-    
+
 ---------------------------------------------------------------
 2) Get User By Id: change user_id with actual user_id
 
@@ -52,6 +53,7 @@ Response:
 
 ---------------------------------------------------------------
 4) Get All Products into the System
+
 Request:
     uri: /api/products
     methodType: GET
