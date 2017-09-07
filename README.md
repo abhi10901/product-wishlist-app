@@ -15,6 +15,7 @@ Response:
             name: user_name
         },...]
     }
+    
 ---------------------------------------------------------------
 2) Get User By Id: change user_id with actual user_id
 
@@ -68,6 +69,7 @@ Response:
             stock_status: product_status
         },...]
     }
+
 ---------------------------------------------------------------
 5) Get Product By Id: change user_id with actual product_id
 
